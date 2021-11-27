@@ -6,26 +6,30 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OpenWeatherService extends AbstractOpenWeatherService
 {
-
-    private $baseUrl;
+  
+    private $apiKey;
     private HttpClientInterface $httpClient;
 
-    //private const URL = 'http://api.openweathermap.org/data/2.5/weather?q=D%C3%BCsselsdorf,de&appid=8ca1bf554fe26dff41d635d4e2f866ed';
+    private const URL = 'http://api.openweathermap.org/data/2.5/weather';
 
-    public function __construct(string $baseUrl, HttpClientInterface  $httpClient)
+    public function __construct(string $apiKey, HttpClientInterface  $httpClient)
     {
-        $this->baseUrl = $baseUrl;
+        //$this->baseUrl = $baseUrl;
+        $this->apiKey = $apiKey;
         $this->httpClient = $httpClient;
     }
 
 
-    public function fetchData(string $location): string
+    public function fetchData($request)
     {
-        
-        $response  = $this->httpClient->request('GET', $this->baseUrl,[
+        $response  = $this->httpClient->request('GET', self::URL,[
             'headers' => [
             'Accept' => 'application/json',
             ],
+            'query'   => [
+                'q' => $request->query->get('q'),
+                'appid' => $this->apiKey
+            ]
         ]);
 
         if ($response->getStatusCode() !== 200) {
@@ -33,7 +37,8 @@ class OpenWeatherService extends AbstractOpenWeatherService
             return throw new \Exception();
         }
 
-        return json_decode($response->getContent());
+        $fetchedData = json_decode($response->getContent());
+        return $fetchedData;
 
         
         // $httpClient = HttpClient::create();
