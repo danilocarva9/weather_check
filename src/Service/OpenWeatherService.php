@@ -62,11 +62,24 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         $daytemp = false;
         $rival = false;
 
+        // echo $this->isDay($city);
+       
+        //  echo "<br/>";
+        // $timestamp= $city['dt'];
+        // echo 'dt: '.gmdate("Y-m-d  H:i:s", $timestamp);
+        // echo "<br/>";
+        // $timestamp= $city['sys']['sunrise'];
+        // echo 'sunrise: '.gmdate("Y-m-d  H:i:s", $timestamp);
+        // echo "<br/>";
+        // $timestamp= $city['sys']['sunset'];
+        // echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
+        // exit;
+
         if($this->isOdd(strlen($city['name']))){
            $naming = true;
         }
 
-        if(($this->isNight($city) and $this->isTemperatureBetween($city['main']['temp'], 10, 15)) or 
+        if((!$this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 10, 15)) or 
         ($this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 17, 25))){
             $daytemp = true;
         }
@@ -77,45 +90,49 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         }
 
         $result = [
-            'check' => false,
+            'check' => $check,
             'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival]
         ];
 
         return $result;
     }
 
-   
     function isOdd($num): bool
     {
         return (is_int($num) && abs($num % 2) == 1) ? true : false;
     }
 
-    function isNight($data): bool
+    function isDay($data)
     {
+        return ((gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
+        gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])) ? true : false;
+            
 
-        // if(($data['dt'] > $data['sys']['sunset']) && ($data['dt'] < $data['sys']['sunrise'])){
-        //     echo "eh noite";
-        // }else{
+        // if( (gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
+        //      gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])){
         //     echo "eh dia";
+        // }else{
+        //     echo "eh noite";
         // }
-        // return true;
 
-        //return ($data['dt'] > $data['sys']['sunset']) && ($data['dt'] < $data['sys']['sunrise']) ? true : false;
-        $timestamp= $data['dt'];
-        echo 'dt: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        echo "<br/>";
-        $timestamp= $data['sys']['sunrise'];
-        echo 'sunrise: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        echo "<br/>";
-        $timestamp= $data['sys']['sunset'];
-        echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        exit;
+        // echo "<br/>";
+        // $timestamp= $data['dt'];
+        // echo 'dt: '.gmdate("Y-m-d  H:i:s", $timestamp);
+        // echo "<br/>";
+        // $timestamp= $data['sys']['sunrise'];
+        // echo 'sunrise: '.gmdate("Y-m-d  H:i:s", $timestamp);
+        // echo "<br/>";
+        // $timestamp= $data['sys']['sunset'];
+        // echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
+
+        // exit;
+
     }
 
-    function isDay($data): bool
-    {
-       return false;
-    }
+    // function isDay($data): bool
+    // {
+    //    return false;
+    // }
 
     function isTemperatureBetween($current_temp, $temp1, $temp2): bool 
     {
