@@ -74,24 +74,27 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         // $timestamp= $city['sys']['sunset'];
         // echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
         // exit;
-
-        if($this->isOdd(strlen($city['name']))){
+      
+        if($this->isOdd(strlen(utf8_decode($city['name'])))){
            $naming = true;
+           $check = true;
         }
 
         if((!$this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 10, 15)) or 
         ($this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 17, 25))){
             $daytemp = true;
+            $check = true;
         }
 
-        $location_temp = $this->fetchWeatherCity($this->preLocation)['main']['temp'];
-        if($this->isWarmerThan($city['main']['temp'], $location_temp)){
+        if($this->isWarmerThan($city['main']['temp'], $this->fetchWeatherCity($this->preLocation)['main']['temp'])){
             $rival = true;
+            $check = true;
         }
 
         $result = [
             'check' => $check,
-            'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival]
+            'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival],
+            'data' => $city
         ];
 
         return $result;
@@ -106,33 +109,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
     {
         return ((gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
         gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])) ? true : false;
-            
-
-        // if( (gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
-        //      gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])){
-        //     echo "eh dia";
-        // }else{
-        //     echo "eh noite";
-        // }
-
-        // echo "<br/>";
-        // $timestamp= $data['dt'];
-        // echo 'dt: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        // echo "<br/>";
-        // $timestamp= $data['sys']['sunrise'];
-        // echo 'sunrise: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        // echo "<br/>";
-        // $timestamp= $data['sys']['sunset'];
-        // echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
-
-        // exit;
-
     }
-
-    // function isDay($data): bool
-    // {
-    //    return false;
-    // }
 
     function isTemperatureBetween($current_temp, $temp1, $temp2): bool 
     {
@@ -143,6 +120,4 @@ class OpenWeatherService implements OpenWeatherServiceInterface
     {
         return ($current_temp > $location_temp) ? true : false;
     }
-
-
 }
