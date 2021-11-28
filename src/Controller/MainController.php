@@ -19,11 +19,7 @@ class MainController extends AbstractController
     #[Route('/check', name: 'check')]
     public function check(Request $request): Response
     {
-        $response = $this->openWeatherService->fetchData($request);
-        return $this->json([
-            'check' => false,
-            'criteria' => ['naming'=>true, 'daytemp'=>false, 'rival'=>true],
-            'data' => $response
-        ]);
+        $response = $this->openWeatherService->fetchOne($request->query->get('q'));
+        return $this->json($response);
     }
 }

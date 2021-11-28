@@ -4,5 +4,5 @@ namespace App\Service;
 
 interface OpenWeatherServiceInterface
 {
-    public function fetchData($request);
+    public function fetchOne(string $city);
 }
