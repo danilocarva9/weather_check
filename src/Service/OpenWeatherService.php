@@ -24,10 +24,9 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         $this->httpClient = $httpClient;
     }
 
-    public function fetchOne(string $city)
+    public function fetchOne(string $city): array
     {
-        $city_forecast = $this->parseWeatherCity($this->fetchWeatherCity($city));
-        return $city_forecast;
+        return $this->parseWeatherCity($this->fetchWeatherCity($city));
     }
 
     private function fetchWeatherCity(string $city): array
@@ -105,15 +104,15 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         return (is_int($num) && abs($num % 2) == 1) ? true : false;
     }
 
-    function isDay($data)
+    function isDay($data): bool
     {
         return ((gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
         gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])) ? true : false;
     }
 
-    function isTemperatureBetween($current_temp, $temp1, $temp2): bool 
+    function isTemperatureBetween($current_temp, $start_temp, $end_temp): bool 
     {
-       return ($current_temp > $temp1) && ($current_temp < $temp2) ? true : false;
+       return ($current_temp > $start_temp) && ($current_temp < $end_temp) ? true : false;
     }
 
     function isWarmerThan($current_temp, $location_temp): bool 

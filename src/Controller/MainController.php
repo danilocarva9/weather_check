@@ -10,6 +10,7 @@ use App\Service\OpenWeatherService;
 
 class MainController extends AbstractController
 {
+    protected $openWeatherService;
     
     public function __construct(OpenWeatherService $openWeatherService)
     {
