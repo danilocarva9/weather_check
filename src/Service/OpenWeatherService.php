@@ -53,45 +53,20 @@ class OpenWeatherService implements OpenWeatherServiceInterface
 
     private function parseWeatherCity(array $city): array
     {
-
-        //dd($city);
         $result = [];
-        $check = false;
-        $naming = false;
         $daytemp = false;
-        $rival = false;
 
-        // echo $this->isDay($city);
-       
-        //  echo "<br/>";
-        // $timestamp= $city['dt'];
-        // echo 'dt: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        // echo "<br/>";
-        // $timestamp= $city['sys']['sunrise'];
-        // echo 'sunrise: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        // echo "<br/>";
-        // $timestamp= $city['sys']['sunset'];
-        // echo 'sunset: '.gmdate("Y-m-d  H:i:s", $timestamp);
-        // exit;
-      
-        if($this->isOdd(strlen(utf8_decode($city['name'])))){
-           $naming = true;
-           $check = true;
-        }
+        $naming = $this->isOdd(strlen(utf8_decode($city['name'])));
 
         if((!$this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 10, 15)) or 
         ($this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 17, 25))){
             $daytemp = true;
-            $check = true;
         }
 
-        if($this->isWarmerThan($city['main']['temp'], $this->fetchWeatherCity($this->preLocation)['main']['temp'])){
-            $rival = true;
-            $check = true;
-        }
+        $rival = $this->isWarmerThan($city['main']['temp'], $this->fetchWeatherCity($this->preLocation)['main']['temp']);
 
         $result = [
-            'check' => $check,
+            'check' => ($naming && $daytemp && $rival) ? true : false,
             'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival],
             'data' => $city
         ];
@@ -99,12 +74,12 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         return $result;
     }
 
-    function isOdd($num): bool
+    function isOdd(int $num): bool
     {
         return (is_int($num) && abs($num % 2) == 1) ? true : false;
     }
 
-    function isDay($data): bool
+    function isDay(array $data = []): bool
     {
         return ((gmdate("Y-m-d H:i:s", $data['dt']) > gmdate("Y-m-d H:i:s", $data['sys']['sunrise'])) &&
         gmdate("Y-m-d H:i:s", $data['dt']) < gmdate("Y-m-d H:i:s", $data['sys']['sunset'])) ? true : false;

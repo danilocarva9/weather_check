@@ -18,7 +18,11 @@
         "symfony/yaml": "5.3.*"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.36"
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "5.3.*",
+        "symfony/css-selector": "5.3.*",
+        "symfony/maker-bundle": "^1.36",
+        "symfony/phpunit-bridge": "^6.0"
     },
     "config": {
         "optimize-autoloader": true,
