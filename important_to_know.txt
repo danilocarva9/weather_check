@@ -1,0 +1,5 @@
+
+start server: php -S localhost:8000 -t public/
+
+
+php ./vendor/bin/phpunit tests\Functional\Service\OpenWeatherFunctionalTest.php

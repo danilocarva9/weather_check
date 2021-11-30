@@ -5,14 +5,11 @@ namespace App\Tests\Unit\Service;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Service\OpenWeatherService;
 
-class OpenWeatherTest extends WebTestCase
+class OpenWeatherUnitTest extends WebTestCase
 {
-    public function test_place_name_should_have_odd_number_of_letters()
+    public function test_place_name_should_have_odd_number_of_letters(): void
     {
-
-        self::bootKernel();
-
-        $container = self::$container;
+        $container = self::getContainer();
         $service = $container->get(OpenWeatherService::class);
         $this->assertTrue($service->isOdd('Cairo'));
     }

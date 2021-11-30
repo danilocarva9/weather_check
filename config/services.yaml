@@ -29,6 +29,7 @@ services:
     open-weather-service:
       class: App\Service\OpenWeatherService
     App\Service\OpenWeatherService:
+      public: true
       arguments:
             $baseUrl: '%app.api_open_weather_map_url%'
             $apiKey: '%env(OPENWEATHERMAP_API_KEY)%'

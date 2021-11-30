@@ -17,7 +17,14 @@ class MainController extends AbstractController
         $this->openWeatherService = $openWeatherService;
     }
 
-    #[Route('/check', name: 'check')]
+    //#[Route('/check', name: 'check')] - newer way
+
+    /**
+     * Matches /check exactly
+     *
+     * @Route("/check", name="check")
+     */
+
     public function check(Request $request): Response
     {
         $response = $this->openWeatherService->fetchOne($request->query->get('q'));
