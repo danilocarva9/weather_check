@@ -12,10 +12,9 @@ class OpenWeatherTest extends WebTestCase
 
         self::bootKernel();
 
-        // gets the special container that allows fetching private services
         $container = self::$container;
-        $phpDocxService = $container->get(OpenWeatherService::class);
-        $this->assertTrue($phpDocxService->isOdd(5));
+        $service = $container->get(OpenWeatherService::class);
+        $this->assertTrue($service->isOdd('Cairo'));
     }
 
     // public function test_place_is_currently_night_and_temperature_between()

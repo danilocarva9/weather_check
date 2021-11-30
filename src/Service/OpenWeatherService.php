@@ -56,7 +56,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         $result = [];
         $daytemp = false;
 
-        $naming = $this->isOdd(strlen(utf8_decode($city['name'])));
+        $naming = $this->isOdd($city['name']);
 
         if((!$this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 10, 15)) or 
         ($this->isDay($city) and $this->isTemperatureBetween($city['main']['temp'], 17, 25))){
@@ -74,8 +74,9 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         return $result;
     }
 
-    function isOdd(int $num): bool
+    function isOdd(string $place_name): bool
     {
+        $num = strlen(utf8_decode($place_name));
         return (is_int($num) && abs($num % 2) == 1) ? true : false;
     }
 
