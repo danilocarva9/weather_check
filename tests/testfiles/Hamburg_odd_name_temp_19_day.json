@@ -1,0 +1,43 @@
+{
+    "coord": {
+      "lon": 10,
+      "lat": 53.55
+    },
+    "weather": [
+      {
+        "id": 803,
+        "main": "Clouds",
+        "description": "broken clouds",
+        "icon": "04n"
+      }
+    ],
+    "base": "stations",
+    "main": {
+      "temp": 19,
+      "feels_like": 22,
+      "temp_min": 18.14,
+      "temp_max": 24.45,
+      "pressure": 1002,
+      "humidity": 88
+    },
+    "visibility": 10000,
+    "wind": {
+      "speed": 2.06,
+      "deg": 230
+    },
+    "clouds": {
+      "all": 75
+    },
+    "dt": 1638271000,
+    "sys": {
+      "type": 1,
+      "id": 1263,
+      "country": "DE",
+      "sunrise": 1638256320,
+      "sunset": 1638284747
+    },
+    "timezone": 3600,
+    "id": 2911298,
+    "name": "Hamburg",
+    "cod": 200
+  }
