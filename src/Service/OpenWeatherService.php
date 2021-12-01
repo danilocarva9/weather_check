@@ -51,7 +51,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
         return $response->toArray();
     }
 
-    private function parseWeatherCity(array $city): array
+    public function parseWeatherCity(array $city): array
     {
         $result = [];
         $daytemp = false;
@@ -67,8 +67,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
 
         $result = [
             'check' => ($naming && $daytemp && $rival) ? true : false,
-            'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival],
-            'data' => $city
+            'criteria' => ['naming' => $naming, 'daytemp' => $daytemp, 'rival' => $rival]
         ];
 
         return $result;

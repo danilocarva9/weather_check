@@ -15,25 +15,18 @@ class OpenWeatherFunctionalTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
-
     public function test_it_returns_all_criterias_true(): void
     {
+        $data_place1 = json_decode(file_get_contents("./tests/testfiles/Cairo_odd_name_temp_11_night.json"), true);
 
-        $client = static::createClient();
-     
-        // Start mocking
-        // $container = self::getContainer();
-        // $openWeatherService = $this->getMockBuilder(OpenWeatherService::class)
-        // ->disableOriginalConstructor()
-        // ->onlyMethods(['fetchOne'])
-        // ->getMock();
-        // $openWeatherService->method('fetchOne')->willThrowException(new \Exception());
-        // $container->set('App\Service\OpenWeatherService', $openWeatherService);
-        // End mocking
-
-        $client->request('GET', '/check', ['q' => 'Madrid']);
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-         //$this->assertResponseIsSuccessful();
+        $container = self::getContainer();
+        $service = $container->get(OpenWeatherService::class);
+        $response = $service->parseWeatherCity($data_place1);
+        
+        $this->assertTrue($response['check']);
+        $this->assertTrue($response['criteria']['naming']);
+        $this->assertTrue($response['criteria']['daytemp']);
+        $this->assertTrue($response['criteria']['rival']);
     }
    
 }
