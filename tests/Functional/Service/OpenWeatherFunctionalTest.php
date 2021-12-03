@@ -7,12 +7,20 @@ use App\Service\OpenWeatherService;
 
 class OpenWeatherFunctionalTest extends WebTestCase
 {
-
     public function test_it_returns_200_if_place_exists(): void
     {
         $client = static::createClient();
         $client->request('GET', '/check', ['q' => 'Madrid']);
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+    }
+
+    public function test_it_returns_error_if_place_not_exist_or_json_error(): void
+    {
+        $err = ['error' => true];
+        $client = static::createClient();
+        $client->request('GET', '/check', ['q' => 'Mallaga']);
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+        $this->assertArrayHasKey('error', $err);
     }
 
     public function test_it_returns_all_criterias_true(): void
@@ -28,5 +36,4 @@ class OpenWeatherFunctionalTest extends WebTestCase
         $this->assertTrue($response['criteria']['daytemp']);
         $this->assertTrue($response['criteria']['rival']);
     }
-   
 }

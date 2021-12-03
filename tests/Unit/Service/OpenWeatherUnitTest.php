@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Tests\Unit\Service;
-//use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Service\OpenWeatherService;
 

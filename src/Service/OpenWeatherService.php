@@ -3,12 +3,9 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class OpenWeatherService implements OpenWeatherServiceInterface
 {
-    
     private $baseUrl;
     private $apiKey;
     private $apiUnit;
@@ -33,7 +30,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
     {
         $response  = $this->httpClient->request('GET', $this->baseUrl,[
             'headers' => [
-            'Accept' => 'application/json',
+                'Accept' => 'application/json',
             ],
             'query'   => [
                 'q' => $city,
@@ -41,12 +38,6 @@ class OpenWeatherService implements OpenWeatherServiceInterface
                 'units' => $this->apiUnit
             ]
         ]);
-
-        if ($response->getStatusCode() == 404) {
-            throw new NotFoundHttpException();
-        } elseif ($response->getStatusCode() != 200) {
-            throw new ServiceUnavailableHttpException();
-        }
 
         return $response->toArray();
     }
@@ -87,7 +78,7 @@ class OpenWeatherService implements OpenWeatherServiceInterface
 
     function isTemperatureBetween($current_temp, $start_temp, $end_temp): bool 
     {
-       return ($current_temp > $start_temp) && ($current_temp < $end_temp) ? true : false;
+        return ($current_temp > $start_temp) && ($current_temp < $end_temp) ? true : false;
     }
 
     function isWarmerThan($current_temp, $location_temp): bool 
